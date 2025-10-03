@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kampüsteyız Programı - KAMPUSTEYIZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #00a676;
+            --accent-color: #ffd700;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --white: #fff;
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+        }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: linear-gradient(135deg, var(--bg-color) 0%, #e3f2fd 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        header { 
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white); 
+            padding: 60px 20px 40px; 
+            text-align: center; 
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        header h1 { 
+            font-size: 3em; 
+            margin: 0; 
+            font-weight: 700; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative; z-index: 1;
+        }
+        header p { 
+            font-size: 1.2em; 
+            margin: 10px 0 0; 
+            opacity: 0.9;
+            position: relative; z-index: 1;
+        }
+        nav { 
+            background: rgba(255,255,255,0.95); 
+            padding: 15px 0; 
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 100;
+        }
+        nav a { 
+            color: var(--primary-color); 
+            margin: 0 20px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        nav a:hover { 
+            background: var(--secondary-color); 
+            color: var(--white); 
+            transform: translateY(-2px);
+        }
+        main { 
+            padding: 40px 20px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        section { 
+            margin-bottom: 60px; 
+            background: var(--white); 
+            padding: 40px; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        section h2 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex; align-items: center;
+            gap: 10px;
+        }
+        section h2 i { color: var(--secondary-color); }
+        #qrcode { 
+            text-align: center; 
+            margin: 30px 0; 
+            background: var(--bg-color); 
+            padding: 20px; 
+            border-radius: var(--border-radius);
+        }
+        .balance-display { 
+            background: linear-gradient(135deg, var(--secondary-color), #00d4aa);
+            color: var(--white); 
+            padding: 20px; 
+            border-radius: var(--border-radius); 
+            text-align: center; 
+            font-weight: 600; 
+            font-size: 1.5em;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,166,118,0.3);
+        }
+        form { 
+            display: grid; 
+            gap: 15px; 
+        }
+        input, select, textarea, button { 
+            padding: 15px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: var(--border-radius); 
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            transform: scale(1.02);
+        }
+        button { 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            color: var(--white); 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(44,90,160,0.4);
+        }
+        .hidden { display: none; }
+        .secure-step { 
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7); 
+            padding: 20px; 
+            border-radius: var(--border-radius); 
+            margin: 15px 0; 
+            border-left: 5px solid var(--accent-color);
+        }
+        .payment-section { 
+            border-top: 1px solid #e0e0e0; 
+            padding-top: 30px; 
+        }
+        .friend-list { list-style: none; padding: 0; }
+        .friend-item { 
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef); 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: var(--border-radius); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .friend-item:hover { transform: scale(1.02); }
+        ul { padding-left: 20px; }
+        li { margin: 10px 0; }
+        img { 
+            width: 100%; 
+            max-width: 600px; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        img:hover { transform: scale(1.05); }
+        footer { 
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            color: var(--white); 
+            text-align: center; 
+            padding: 20px; 
+            margin-top: 60px;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 2em; }
+            section { padding: 20px; }
+            nav a { display: block; margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-graduation-cap"></i> Kampüs Programı</h1>
+        <p>Yenilikçi ve Etkileşimli Öğrenci Deneyimi</p>
+    </header>
+    <nav>
+        <a href="#anasayfa"><i class="fas fa-home"></i> Anasayfa</a>
+        <a href="#programlar"><i class="fas fa-book"></i> Programlar</a>
+        <a href="#cuzdan"><i class="fas fa-wallet"></i> Cüzdan & Bakiye</a>
+        <a href="#odeme"><i class="fas fa-credit-card"></i> Ödeme Yap</a>
+        <a href="#odeme-al"><i class="fas fa-qrcode"></i> Ödeme Al</a>
+        <a href="#ortak-ode"><i class="fas fa-users"></i> Ortak Öde</a>
+        <a href="#iletisim"><i class="fas fa-envelope"></i> İletişim</a>
+    </nav>
+    <main>
+        <section id="anasayfa">
+            <h2><i class="fas fa-university"></i> Kampüs Hakkında</h2>
+            <p>Bu orijinal platform, kampüs programımızı benzersiz bir şekilde tanıtmak ve öğrencileri etkileşimli bir dünyaya davet etmek için tasarlandı. Dinamik etkinlikler, yenilikçi kurslar ve sürpriz fırsatlarla dolu bir evren keşfedin!</p>
+            <img src="https://via.placeholder.com/800x400/2c5aa0/e3f2fd?text=Yenilikçi+Kampus+Dünyası" alt="Kampüs Görseli">
+        </section>
+        <section id="programlar">
+            <h2><i class="fas fa-list-alt"></i> Programlarımız</h2>
+            <ul>
+                <li><strong><i class="fas fa-code"></i> Yazılım Geliştirme:</strong> Python ve web teknolojileri üzerine immersif pratik eğitimler.</li>
+                <li><strong><i class="fas fa-paint-brush"></i> Web Tasarım:</strong> HTML, CSS ve UI/UX temelleri ile yaratıcı atölyeler.</li>
+                <li><strong><i class="fas fa-chart-line"></i> Veri Bilimi:</strong> Veri analizi ve makine öğrenimi için interaktif oturumlar.</li>
+            </ul>
+            <p>Daha fazla orijinal program için <a href="#" style="color: var(--secondary-color);">kaydolun</a> ve maceraya katılın!</p>
+        </section>
+        <section id="cuzdan">
+            <h2><i class="fas fa-coins"></i> Cüzdan ve Bakiye</h2>
+            <p>Kampüs cüzdanınızı akıllıca yönetin. Mevcut bakiyeniz dinamik olarak güncellenir:</p>
+            <div id="balance" class="balance-display"><i class="fas fa-balance-scale"></i> Bakiye: 150.00 TL</div>
+            <button onclick="updateBalance()"><i class="fas fa-sync-alt"></i> Bakiyeyi Güncelle</button>
+            <p>QR Kod ile Ödeme Alın: Bu benzersiz QR'ı taratarak anında ödemeleri kabul edin.</p>
+            <div id="qrcode"></div>
+            <script>
+                // QR Kod Oluşturma
+                new QRCode(document.getElementById("qrcode"), {
+                    text: "kampus://odeme?kullanici=ogrenci123&bakiye=150.00",
+                    width: 200,
+                    height: 200,
+                    colorDark: "#2c5aa0",
+                    colorLight: "#f8f9fa"
+                });
+
+                // Bakiye Güncelleme (Mock)
+                function updateBalance() {
+                    const balances = [150, 200, 120, 250]; // Örnek değerler
+                    const randomBalance = balances[Math.floor(Math.random() * balances.length)];
+                    document.getElementById("balance").innerHTML = `<i class="fas fa-balance-scale"></i> Bakiye: ${randomBalance.toFixed(2)} TL`;
+                }
+            </script>
+        </section>
+        <section id="odeme">
+            <h2><i class="fas fa-shield-alt"></i> Ödeme Yap (3D Secure Destekli)</h2>
+            <p>Kampüs programları için güvenli ve hızlı ödeme yapın. Kart veya QR ile işlem yapın. Altyapımız iyzico benzeri gateway ile 3D Secure protokolü (Verified by Visa/Mastercard SecureCode) ile korunur – ekstra güvenlik katmanı!</p>
+            
+            <!-- Kart Bilgileri Formu -->
+            <form id="cardForm">
+                <label><i class="fas fa-money-bill-wave"></i> Tutar (TL): <input type="number" id="amount" min="1" step="0.01" required></label>
+                <label><i class="fas fa-credit-card"></i> Kart Numarası: <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required></label>
+                <label><i class="fas fa-calendar-alt"></i> Son Kullanma Tarihi: <input type="month" id="expiry" required></label>
+                <label><i class="fas fa-lock"></i> CVV: <input type="text" id="cvv" maxlength="3" required></label>
+                <button type="submit"><i class="fas fa-arrow-right"></i> 3D Secure ile Ödemeyi Başlat</button>
+            </form>
+            
+            <!-- 3D Secure Adım 1: Yönlendirme Simülasyonu -->
+            <div id="secureStep1" class="secure-step hidden">
+                <h3><i class="fas fa-user-shield"></i> 3D Secure Doğrulama</h3>
+                <p>Kartınız için ek doğrulama gerekiyor. Banka sayfasına yönlendiriliyorsunuz (güvenli simülasyon).</p>
+                <button onclick="proceedToSecure2()"><i class="fas fa-check"></i> Doğrulamayı Tamamla</button>
+            </div>
+            
+            <!-- 3D Secure Adım 2: OTP/Şifre Girişi -->
+            <div id="secureStep2" class="secure-step hidden">
+                <h3><i class="fas fa-key"></i> Ek Güvenlik Kodu</h3>
+                <p>Banka tarafından gönderilen OTP veya şifrenizi girin:</p>
+                <input type="text" id="secureCode" placeholder="6 haneli kod" maxlength="6" required>
+                <button onclick="completePayment()"><i class="fas fa-lock-open"></i> Doğrulamayı Onayla</button>
+            </div>
+            
+            <p id="paymentResult" style="margin-top:10px; color: var(--secondary-color); font-weight: 600;"></p>
+            
+            <script>
+                // Kart Formu Gönderimi
+                document.getElementById("cardForm").addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    const amount = document.getElementById("amount").value;
+                    document.getElementById("cardForm").classList.add("hidden");
+                    document.getElementById("secureStep1").classList.remove("hidden");
+                });
+
+                function proceedToSecure2() {
+                    document.getElementById("secureStep1").classList.add("hidden");
+                    document.getElementById("secureStep2").classList.remove("hidden");
+                }
+
+                function completePayment() {
+                    const amount = document.getElementById("amount").value;
+                    const code = document.getElementById("secureCode").value;
+                    if (code.length === 6) {
+                        document.getElementById("secureStep2").classList.add("hidden");
+                        document.getElementById("paymentResult").innerHTML = `<i class="fas fa-check-circle"></i> ${amount} TL ödeme başarıyla tamamlandı! Bakiyeniz güncellendi. (Gerçek entegrasyon: iyzico/PayTR API ile 3DS callback).`;
+                        updateBalance(); // Bakiyeyi güncelle
+                    } else {
+                        alert("Geçersiz kod! Lütfen 6 haneli doğru kodu girin.");
+                    }
+                }
+            </script>
+        </section>
+        <section id="odeme-al">
+            <h2><i class="fas fa-download"></i> Ödeme Al</h2>
+            <p>Başka kullanıcılardan anında ödeme alın. Bu orijinal QR'ı paylaşın veya link oluşturun – kolay ve şık!</p>
+            <div id="receiveQR"></div>
+            <p>Ödeme Linki: <a id="paymentLink" href="#" target="_blank" style="color: var(--secondary-color); font-weight: 600;"><i class="fas fa-link"></i> kampus.com/odeme-al/ogrenci123</a></p>
+            <button onclick="generateReceiveQR()"><i class="fas fa-qrcode"></i> Yeni QR Oluştur</button>
+            <p id="receiveResult" style="color: var(--secondary-color); font-weight: 600;"></p>
+            <script>
+                function generateReceiveQR() {
+                    new QRCode(document.getElementById("receiveQR"), {
+                        text: "kampus://odeme-al?kullanici=ogrenci123&tutar=50.00",
+                        width: 200,
+                        height: 200,
+                        colorDark: "#00a676",
+                        colorLight: "#f8f9fa"
+                    });
+                    document.getElementById("paymentLink").href = "kampus://odeme-al?kullanici=ogrenci123&tutar=50.00";
+                    document.getElementById("receiveResult").innerHTML = `<i class="fas fa-thumbs-up"></i> QR ve link hazır! Paylaşın ve ödemeleri toplayın.`;
+                    updateBalance(); // Örnek: Bakiye artışı simüle et
+                }
+                // İlk QR'yi oluştur
+                generateReceiveQR();
+            </script>
+        </section>
+        <section id="ortak-ode">
+            <h2><i class="fas fa-share-alt"></i> Ortak Öde</h2>
+            <p>Arkadaşlarınızla faturayı adilce bölüşün. Toplam tutarı girin, arkadaş ekleyin ve her birine payı otomatik hesaplayın – grup eğlencesi!</p>
+            <form id="splitForm">
+                <label><i class="fas fa-calculator"></i> Toplam Tutar (TL): <input type="number" id="totalAmount" min="1" step="0.01" required></label>
+                <label><i class="fas fa-user-plus"></i> Arkadaş Adı: <input type="text" id="friendName" placeholder="Arkadaş adı ekleyin" required></label>
+                <button type="button" onclick="addFriend()"><i class="fas fa-plus"></i> Arkadaş Ekle</button>
+                <ul id="friendList" class="friend-list"></ul>
+                <button type="submit"><i class="fas fa-users-cog"></i> Ortak Ödemeyi Başlat</button>
+            </form>
+            <p id="splitResult" style="margin-top:10px; color: var(--primary-color); font-weight: 600;"></p>
+            <script>
+                let friends = [];
+
+                function addFriend() {
+                    const name = document.getElementById("friendName").value;
+                    if (name) {
+                        friends.push({name: name, paid: false});
+                        renderFriends();
+                        document.getElementById("friendName").value = "";
+                    }
+                }
+
+                function renderFriends() {
+                    const list = document.getElementById("friendList");
+                    list.innerHTML = "";
+                    friends.forEach((friend, index) => {
+                        const li = document.createElement("li");
+                        li.className = "friend-item";
+                        li.innerHTML = `
+                            <span><i class="fas fa-user"></i> ${friend.name}</span>
+                            <button onclick="togglePay(${index})" style="background: ${friend.paid ? var(--secondary-color) : '#ff6b6b'}; padding: 8px 12px; border-radius: 50%; border: none; color: white; cursor: pointer;">
+                                <i class="fas ${friend.paid ? 'fa-check' : 'fa-times'}"></i>
+                            </button>
+                        `;
+                        list.appendChild(li);
+                    });
+                }
+
+                function togglePay(index) {
+                    friends[index].paid = !friends[index].paid;
+                    renderFriends();
+                }
+
+                document.getElementById("splitForm").addEventListener("submit", function(e) {
+                    e.preventDefault();
+                    const total = parseFloat(document.getElementById("totalAmount").value);
+                    const paidCount = friends.filter(f => f.paid).length;
+                    const share = total / friends.length;
+                    document.getElementById("splitResult").innerHTML = `
+                        <i class="fas fa-chart-pie"></i> ${friends.length} arkadaş için her biri <strong>${share.toFixed(2)} TL</strong> ödeyecek. 
+                        ${paidCount} kişi ödendi. Kalan: <strong>${(total - (paidCount * share)).toFixed(2)} TL</strong>. 
+                        (Gerçekte: Grup QR veya link paylaşımı ile entegrasyon).
+                    `;
+                });
+            </script>
+        </section>
+        <section id="iletisim">
+            <h2><i class="fas fa-headset"></i> İletişim</h2>
+            <p>Herhangi bir sorunuz için bize ulaşın: <a href="mailto:info@kampus.com" style="color: var(--secondary-color);"><i class="fas fa-envelope"></i> info@kampus.com</a></p>
+            <p>Telefon: <i class="fas fa-phone"></i> 532</p>
+            <form style="display: grid; gap: 15px;">
+                <label><i class="fas fa-user"></i> Adınız: <input type="text"></label>
+                <label><i class="fas fa-at"></i> E-posta: <input type="email"></label>
+                <textarea placeholder="Mesajınızı yazın..." style="height: 120px; resize: vertical;"></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Mesaj Gönder</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy;  Kampüs Programı. <i class="fas fa-heart" style="color: var(--accent-color);"></i> Tüm hakları saklıdır. Ödeme altyapısı: Güvenli 3D Secure ile korunur.</p>
+    </footer>
+</body>
+</html>

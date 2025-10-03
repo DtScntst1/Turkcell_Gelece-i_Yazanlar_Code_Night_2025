@@ -1,0 +1,13 @@
+tx_id,user_id,weight,share_amount,status
+TX1,U1,1,30,settled
+TX1,U2,1,30,pending
+TX1,U3,1,30,settled
+TX1,U2,1,30,pending
+TX2,U1,1,20,settled
+TX2,U3,1,20,pending
+TX3,U2,2,40,settled
+TX3,U1,1,20,pending
+TX4,U3,1,15,settled
+TX4,U2,1,15,pending
+TX5,U1,3,45,settled
+TX5,U3,1,15,pending
